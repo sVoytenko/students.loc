@@ -9,11 +9,11 @@ class IndexController extends BaseConttoller
     public function __construct()
     {
         parent::__construct();
-        $id = htmlspecialchars($_COOKIE['id']);
-        $password = htmlspecialchars($_COOKIE['password']);
+        $id = $_COOKIE['id'];
+        $password = $_COOKIE['password'];
         //проверка наличия куки пользователя, если нет - переадресация на страницу регистрации
-        $id = htmlspecialchars($_COOKIE['id']);
-        $password = htmlspecialchars($_COOKIE['password']);
+        $id = $_COOKIE['id'];
+        $password = $_COOKIE['password'];
         if (!$this->gateaway->checkUserExists($id, $password)) {
             header('Location: /registration/');
         }
@@ -24,10 +24,10 @@ class IndexController extends BaseConttoller
     protected function actionIndex()
     {
         $limit = 5;
-        $currentPage = array_key_exists('page', $_GET) ? htmlspecialchars($_GET['page']) : NULL;
+        $currentPage = array_key_exists('page', $_GET) ? $_GET['page'] : NULL;
         $pager = new \Paginator($currentPage, $this->gateaway->getCount(), $limit);
         $startPage = $pager->startPage;
-        $sort = array_key_exists('sort', $_GET) ? htmlspecialchars($_GET['sort']) : 'name';
+        $sort = array_key_exists('sort', $_GET) ? ($_GET['sort']) : 'name';
         $students = $this->gateaway->getAll($sort, $startPage, $limit);
         $data['title'] = 'Список студентов';
         $data['totalPages'] = $pager->totalPages;
@@ -37,7 +37,7 @@ class IndexController extends BaseConttoller
 /* экшен для поиска */
     protected function actionSearch()
     {
-        $search = htmlspecialchars($_GET['s']);
+        $search = $_GET['s'];
         $model = $this->gateaway->search($search, 'name', 0, 10);
         $this->view->display('search', $model);
     }
@@ -45,12 +45,12 @@ class IndexController extends BaseConttoller
     protected function actionUpdate()
     {
         if(empty($_POST)){
-           $id = htmlspecialchars($_COOKIE['id']);
-           $password = htmlspecialchars($_COOKIE['password']);
+           $id = $_COOKIE['id'];
+           $password = $_COOKIE['password'];
            $student = $this->gateaway->getStudent($password, $id);
            $this->view->display('registration', $student);
         } else {
-           $id = htmlspecialchars($_COOKIE['id']);
+           $id = $_COOKIE['id'];
            $student = new \models\Student();
            $student->map($_POST);
            $validator = new \StudentValidator();
