@@ -1,7 +1,9 @@
 <?php
-/* 
+
+/*
  * Решил роутер вынести отдельно. 
  */
+
 class Router
 {
 
@@ -38,9 +40,12 @@ class Router
 
     public function __get($name)
     {
-        if (property_exists($this, $name)) return $this->$name;
+        if (property_exists($this, $name))
+            return $this->$name;
     }
-/* методс возвращает обьект-контроллер */
+
+    /* методс возвращает обьект-контроллер */
+
     public function getController()
     {
         $c = "Controllers\\" . $this->controller;
